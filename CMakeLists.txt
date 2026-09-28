@@ -5,6 +5,13 @@ cmake_policy(SET CMP0091 NEW)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS deployment version")
 project(lovr)
 
+# Single-config generators (Make, Ninja) default to an empty build type, which compiles everything
+# (including Jolt) without optimizations and makes physics many times slower
+get_property(LOVR_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(NOT LOVR_MULTI_CONFIG AND NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
+
 # Modules
 option(LOVR_ENABLE_AUDIO "Enable the audio module" ON)
 option(LOVR_ENABLE_DATA "Enable the data module" ON)
